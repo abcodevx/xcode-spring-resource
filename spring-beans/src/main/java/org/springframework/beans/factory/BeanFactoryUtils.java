@@ -232,25 +232,25 @@ public abstract class BeanFactoryUtils {
 		return result;
 	}
 
-	/**
-	 * Get all bean names for the given type, including those defined in ancestor
-	 * factories. Will return unique names in case of overridden bean definitions.
-	 * <p>Does consider objects created by FactoryBeans if the "allowEagerInit"
-	 * flag is set, which means that FactoryBeans will get initialized. If the
-	 * object created by the FactoryBean doesn't match, the raw FactoryBean itself
-	 * will be matched against the type. If "allowEagerInit" is not set,
-	 * only raw FactoryBeans will be checked (which doesn't require initialization
-	 * of each FactoryBean).
-	 * @param lbf the bean factory
-	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
-	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
-	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
-	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be
-	 * eagerly initialized to determine their type: So be aware that passing in "true"
-	 * for this flag will initialize FactoryBeans and "factory-bean" references.
-	 * @param type the type that beans must match
-	 * @return the array of matching bean names, or an empty array if none
+/**
+	 * 获取给定类型的所有bean名称，包括在祖先中定义的名称
+	 * 工厂。在覆盖 bean 定义的情况下将返回唯一名称。
+	 * <p>如果“allowEagerInit”，则考虑由 FactoryBeans 创建的对象
+	 * 标志被设置，这意味着 FactoryBeans 将被初始化。如果
+	 * FactoryBean 创建的对象与原始 FactoryBean 本身不匹配
+	 * 将与类型匹配。如果没有设置“allowEagerInit”，
+	 * 仅检查原始 FactoryBeans（不需要初始化
+	 * 每个 FactoryBean)。
+	 * @param lbf Bean 工厂
+	 * @param includeNonSingletons 是否也包含原型或作用域 bean
+	 * 或只是单例（也适用于 FactoryBeans）
+	 * @param allowEagerInit 是否初始化lazy-init单例</i>和
+	 * <i>由 FactoryBeans 创建的对象</i>（或由具有
+	 *“factory-bean”参考）用于类型检查。请注意，FactoryBeans 需要是
+	 * 急切地初始化以确定它们的类型：所以要注意传入“true”
+	 * 此标志将初始化 FactoryBeans 和“factory-bean”引用。
+	 * @param type bean必须匹配的类型
+	 * @return 匹配bean名称的数组，如果没有则返回空数组
 	 * @see ListableBeanFactory#getBeanNamesForType(Class, boolean, boolean)
 	 */
 	public static String[] beanNamesForTypeIncludingAncestors(
