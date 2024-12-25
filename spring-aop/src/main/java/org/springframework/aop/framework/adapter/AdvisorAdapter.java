@@ -22,42 +22,44 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.Advisor;
 
 /**
- * Interface allowing extension to the Spring AOP framework to allow
- * handling of new Advisors and Advice types.
+ * 允许扩展 Spring AOP 框架的接口
+ * 处理新的顾问和建议类型。
  *
- * <p>Implementing objects can create AOP Alliance Interceptors from
- * custom advice types, enabling these advice types to be used
- * in the Spring AOP framework, which uses interception under the covers.
+ * <p>实现对象可以创建AOP拦截器
+ * 自定义建议类型，使这些建议类型能够被使用
+ * 在 Spring AOP 框架中，它在幕后使用拦截。
  *
- * <p>There is no need for most Spring users to implement this interface;
- * do so only if you need to introduce more Advisor or Advice types to Spring.
+ * <p>大多数Spring用户没有必要实现这个接口；
+ * 仅当您需要向 Spring 引入更多 Advisor 或 Advice 类型时才这样做。
  *
  * @author Rod Johnson
  */
 public interface AdvisorAdapter {
 
-	/**
-	 * Does this adapter understand this advice object? Is it valid to
-	 * invoke the {@code getInterceptors} method with an Advisor that
-	 * contains this advice as an argument?
-	 * @param advice an Advice such as a BeforeAdvice
-	 * @return whether this adapter understands the given advice object
-	 * @see #getInterceptor(org.springframework.aop.Advisor)
-	 * @see org.springframework.aop.BeforeAdvice
-	 */
-	boolean supportsAdvice(Advice advice);
+    /**
+     * 该适配器是否理解该建议对象？是否有效
+     * 使用 Advisor 调用 {@code getInterceptors} 方法
+     * 包含此建议作为参数吗？
+     *
+     * @param advice an Advice such as a BeforeAdvice
+     * @return whether this adapter understands the given advice object
+     * @see #getInterceptor(org.springframework.aop.Advisor)
+     * @see org.springframework.aop.BeforeAdvice
+     */
+    boolean supportsAdvice(Advice advice);
 
-	/**
-	 * Return an AOP Alliance MethodInterceptor exposing the behavior of
-	 * the given advice to an interception-based AOP framework.
-	 * <p>Don't worry about any Pointcut contained in the Advisor;
-	 * the AOP framework will take care of checking the pointcut.
-	 * @param advisor the Advisor. The supportsAdvice() method must have
-	 * returned true on this object
-	 * @return an AOP Alliance interceptor for this Advisor. There's
-	 * no need to cache instances for efficiency, as the AOP framework
-	 * caches advice chains.
-	 */
-	MethodInterceptor getInterceptor(Advisor advisor);
+    /**
+     * Return an AOP Alliance MethodInterceptor exposing the behavior of
+     * the given advice to an interception-based AOP framework.
+     * <p>Don't worry about any Pointcut contained in the Advisor;
+     * the AOP framework will take care of checking the pointcut.
+     *
+     * @param advisor the Advisor. The supportsAdvice() method must have
+     *                returned true on this object
+     * @return an AOP Alliance interceptor for this Advisor. There's
+     * no need to cache instances for efficiency, as the AOP framework
+     * caches advice chains.
+     */
+    MethodInterceptor getInterceptor(Advisor advisor);
 
 }
