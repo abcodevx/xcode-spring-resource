@@ -292,7 +292,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	@Nullable
 	private static Properties defaultStrategies;
 
-	/** Detect all HandlerMappings or just expect "handlerMapping" bean?. */
+	/** 检测所有 HandlerMappings 还是只期望“handlerMapping”bean？ */
 	private boolean detectAllHandlerMappings = true;
 
 	/** Detect all HandlerAdapters or just expect "handlerAdapter" bean?. */
@@ -502,19 +502,46 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the strategy objects that this servlet uses.
-	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
+	 * 初始化该 servlet 使用的策略对象。
+	 * <p>可以在子类中重写，以便初始化进一步的策略对象。
 	 */
 	protected void initStrategies(ApplicationContext context) {
-		initMultipartResolver(context);
-		initLocaleResolver(context);
-		initThemeResolver(context);
-		initHandlerMappings(context);
-		initHandlerAdapters(context);
-		initHandlerExceptionResolvers(context);
-		initRequestToViewNameTranslator(context);
-		initViewResolvers(context);
-		initFlashMapManager(context);
+        //初始化文件上传解析器
+        //文件上传支持：Spring MVC 支持通过 HTTP POST 请求上传文件，这些请求通常是以 multipart/form-data 格式发送的。
+        //解析多部件内容：MultipartResolver 负责将 multipart/form-data 请求解析为多个部分（如表单字段和文件），以便控制器可以方便地访问和处理这些数据。
+        initMultipartResolver(context);
+
+        //初始化本地化信息解析器
+        //1.国际化支持：Spring MVC 支持多语言和多地区的内容展示，允许应用程序根据用户的区域设置动态切换语言和格式。
+        //2.解析区域信息：LocaleResolver 负责从请求中解析出当前应该使用哪个区域设置（Locale）。它可以通过多种方式来确定区域信息，例如从会话、Cookie 或 URL 参数中获取。
+        initLocaleResolver(context);
+
+        //初始化主题解析器，主题解析器作用
+        //1.主题管理：Spring MVC 支持多主题功能，允许应用程序根据不同的条件（如用户偏好、URL参数等）动态切换主题
+        //2.解析主题：ThemeResolver 负责从请求中解析出当前应该使用哪个主题。它可以通过多种方式来确定主题，例如从会话、Cookie 或 URL 参数中获取。
+        initThemeResolver(context);
+
+        //解析处理路径映射
+        //请求路由：HandlerMapping 负责根据 URL 模式、HTTP 方法等条件将传入的请求映射到适当的处理程序。
+        //灵活的映射规则：Spring MVC 支持多种映射规则，例如基于注解的映射（如 @RequestMapping）、简单的 URL 映射、拦截器链等。
+        initHandlerMappings(context);
+
+        //执行处理器适配器
+        //处理程序调用：HandlerAdapter 负责调用由 HandlerMapping 确定的处理程序，并将请求参数传递给处理程序。
+        //响应生成：它还负责将处理程序的结果转换为适当的 HTTP 响应，例如返回视图名称、JSON 数据等。
+        //灵活性：不同的处理程序可能有不同的签名和返回类型，HandlerAdapter 提供了统一的接口来处理这些差异。
+        initHandlerAdapters(context);
+
+        //初始化异常解析器
+        //处理程序异常：Spring MVC 支持异常处理，当处理程序抛出异常时，异常解析器负责处理异常，并将异常信息传递给适当的处理器。
+        initHandlerExceptionResolvers(context);
+
+        //初始化视图名称转换器
+        initRequestToViewNameTranslator(context);
+        //初始化视图解析器
+        initViewResolvers(context);
+        //初始化 FlashMapManager
+        initFlashMapManager(context);
 	}
 
 	/**
@@ -593,36 +620,39 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerMappings used by this class.
-	 * <p>If no HandlerMapping beans are defined in the BeanFactory for this namespace,
-	 * we default to BeanNameUrlHandlerMapping.
+	 * 初始化该类使用的HandlerMappings。
+	 * <p>如果 BeanFactory 中没有为此命名空间定义 HandlerMapping beans，
+	 * 我们默认为 BeanNameUrlHandlerMapping。
 	 */
 	private void initHandlerMappings(ApplicationContext context) {
 		this.handlerMappings = null;
 
+        //是否检测所有的HandlerMapper，即检测当前容器和父容器中查找。
+		// 如果容器中有则优先使用容器中的HandlerMapper，如果没有则会去创建一个默认的HandlerMapping
 		if (this.detectAllHandlerMappings) {
-			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			// 查找 ApplicationContext 中的所有 HandlerMapping，包括父容器上下文。
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
 			if (!matchingBeans.isEmpty()) {
 				this.handlerMappings = new ArrayList<>(matchingBeans.values());
-				// We keep HandlerMappings in sorted order.
+				// 对handlerMappings进行排序
 				AnnotationAwareOrderComparator.sort(this.handlerMappings);
 			}
 		}
 		else {
 			try {
+				//从context中获取所有HandlerMapping
 				HandlerMapping hm = context.getBean(HANDLER_MAPPING_BEAN_NAME, HandlerMapping.class);
 				this.handlerMappings = Collections.singletonList(hm);
 			}
 			catch (NoSuchBeanDefinitionException ex) {
-				// Ignore, we'll add a default HandlerMapping later.
+				// 忽略，稍后我们将添加一个默认的 HandlerMapping。
 			}
 		}
 
-		// Ensure we have at least one HandlerMapping, by registering
-		// a default HandlerMapping if no other mappings are found.
+		//通过注册确保我们至少有一个 HandlerMapping， 如果没有找到其他映射，则使用默认的 HandlerMapping。
 		if (this.handlerMappings == null) {
+            logger.debug("获取默认HandlerMapping");
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No HandlerMappings declared for servlet '" + getServletName() +
@@ -864,13 +894,13 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Create a List of default strategy objects for the given strategy interface.
-	 * <p>The default implementation uses the "DispatcherServlet.properties" file (in the same
-	 * package as the DispatcherServlet class) to determine the class names. It instantiates
-	 * the strategy objects through the context's BeanFactory.
-	 * @param context the current WebApplicationContext
-	 * @param strategyInterface the strategy interface
-	 * @return the List of corresponding strategy objects
+	 * 为给定策略接口创建默认策略对象列表。
+	 * <p>默认实现使用 `DispatcherServlet.properties`文件（在同一个文件中）
+	 * 包作为 DispatcherServlet 类）来确定类名。它实例化
+	 * 策略对象通过上下文的 BeanFactory 实现。
+	 * @param context 当前的WebApplicationContext
+	 * @param strategyInterface 策略接口
+	 * @return 对应的策略对象列表
 	 */
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> getDefaultStrategies(ApplicationContext context, Class<T> strategyInterface) {
@@ -879,6 +909,8 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Load default strategy implementations from properties file.
 				// This is currently strictly internal and not meant to be customized
 				// by application developers.
+                //会从DispatcherServlet.properties中读取到三个默认的实现，
+                //分别是BeanNameUrlHandlerMapping、RequestMappingHandlerMapping、RouterFunctionMapping进行加载。
 				ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 				defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 			}
