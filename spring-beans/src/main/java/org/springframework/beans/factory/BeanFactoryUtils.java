@@ -348,8 +348,7 @@ public abstract class BeanFactoryUtils {
 	 * the bean in the ancestor factory won't be visible then, not even for by-type lookups.
 	 * @param lbf the bean factory
 	 * @param type type of bean to match
-	 * @param includeNonSingletons whether to include prototype or scoped beans too
-	 * or just singletons (also applies to FactoryBeans)
+	 * @param includeNonSingletons w是否也包含原型或作用域bean或仅包含单例（也适用于Factory Beans）
 	 * @param allowEagerInit whether to initialize <i>lazy-init singletons</i> and
 	 * <i>objects created by FactoryBeans</i> (or by factory methods with a
 	 * "factory-bean" reference) for the type check. Note that FactoryBeans need to be

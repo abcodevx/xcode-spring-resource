@@ -663,7 +663,9 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 		adapter.setContentNegotiationManager(contentNegotiationManager);
 		adapter.setMessageConverters(getMessageConverters());
 		adapter.setWebBindingInitializer(getConfigurableWebBindingInitializer(conversionService, validator));
+		//设置请求参数解析器
 		adapter.setCustomArgumentResolvers(getArgumentResolvers());
+        //设置返回值解析器
 		adapter.setCustomReturnValueHandlers(getReturnValueHandlers());
 		adapter.setErrorResponseInterceptors(getErrorResponseInterceptors());
 
@@ -790,10 +792,10 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	}
 
 	/**
-	 * Provide access to the shared custom argument resolvers used by the
-	 * {@link RequestMappingHandlerAdapter} and the {@link ExceptionHandlerExceptionResolver}.
-	 * <p>This method cannot be overridden; use {@link #addArgumentResolvers} instead.
-	 * @since 4.3
+	 * 提供对共享自定义参数解析器的访问
+	 * {@link RequestMappingHandlerAdapter} 和 {@link ExceptionHandlerExceptionResolver}。
+	 * <p>该方法不能被重写；请改用 {@link #addArgumentResolvers}。
+	 * @since 4.3 起
 	 */
 	protected final List<HandlerMethodArgumentResolver> getArgumentResolvers() {
 		if (this.argumentResolvers == null) {

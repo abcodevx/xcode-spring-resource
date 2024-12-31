@@ -69,23 +69,23 @@ import org.springframework.web.util.UrlPathHelper;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 /**
- * A {@code MockMvcBuilder} that accepts {@code @Controller} registrations
- * thus allowing full control over the instantiation and initialization of
- * controllers and their dependencies similar to plain unit tests, and also
- * making it possible to test one controller at a time.
+ * 接受 {@code @Controller} 注册的 {@code MockMvcBuilder}
+ * 从而允许完全控制实例化和初始化
+ * 控制器及其依赖项类似于普通单元测试，并且
+ * 可以一次测试一个控制器。
  *
- * <p>This builder creates the minimum infrastructure required by the
- * {@link DispatcherServlet} to serve requests with annotated controllers and
- * also provides methods for customization. The resulting configuration and
- * customization options are equivalent to using MVC Java config except
- * using builder style methods.
+ * <p>该构建器创建了所需的最低基础设施
+ * {@link DispatcherServlet} 使用带注释的控制器来服务请求
+ * 还提供了定制的方法。由此产生的配置和
+ * 自定义选项等同于使用 MVC Java 配置，除了
+ * 使用构建器风格的方法。
  *
- * <p>To configure view resolution, either select a "fixed" view to use for every
- * request performed (see {@link #setSingleView(View)}) or provide a list of
- * {@code ViewResolver}s (see {@link #setViewResolvers(ViewResolver...)}).
+ * <p>要配置视图分辨率，请选择“固定”视图以用于每个
+ * 已执行请求（请参阅{@link #setSingleView(View)}）或提供以下列表
+ * {@code ViewResolver}（请参阅{@link #setViewResolvers(ViewResolver...)}）。
  *
- * @author Rossen Stoyanchev
- * @since 3.2
+ * @author 罗森·斯托扬切夫
+ * @since 3.2 起
  */
 public class StandaloneMockMvcBuilder extends AbstractMockMvcBuilder<StandaloneMockMvcBuilder> {
 

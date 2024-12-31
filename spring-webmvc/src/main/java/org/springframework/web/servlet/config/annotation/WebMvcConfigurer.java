@@ -35,17 +35,12 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
- * Defines callback methods to customize the Java-based configuration for
- * Spring MVC enabled via {@code @EnableWebMvc}.
+ * 定义回调方法来定制基于Java的配置
+ * 通过 {@code @EnableWebMvc} 启用 Spring MVC。
  *
- * <p>{@code @EnableWebMvc}-annotated configuration classes may implement
- * this interface to be called back and given a chance to customize the
- * default configuration.
- *
- * @author Rossen Stoyanchev
- * @author Keith Donald
- * @author David Syer
- * @since 3.1
+ * <p>{@code @EnableWebMvc}注释的配置类可以实现
+ * 该接口将被回调并给予自定义的机会
+ * 默认配置。
  */
 public interface WebMvcConfigurer {
 
@@ -142,11 +137,11 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
-	 * Add resolvers to support custom controller method argument types.
-	 * <p>This does not override the built-in support for resolving handler
-	 * method arguments. To customize the built-in support for argument
-	 * resolution, configure {@link RequestMappingHandlerAdapter} directly.
-	 * @param resolvers initially an empty list
+	 * 添加解析器以支持自定义控制器方法参数类型。
+	 * <p>这不会覆盖对解析处理程序的内置支持
+	 * 方法参数。自定义对参数的内置支持
+	 * 解析，直接配置{@link RequestMappingHandlerAdapter}。
+	 * @param resolvers 最初是一个空列表
 	 */
 	default void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 	}

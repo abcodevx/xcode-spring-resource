@@ -669,9 +669,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerAdapters used by this class.
-	 * <p>If no HandlerAdapter beans are defined in the BeanFactory for this namespace,
-	 * we default to SimpleControllerHandlerAdapter.
+	 * 初始化该类使用的HandlerAdapter。
+	 * <p>如果 BeanFactory 中没有为此命名空间定义 HandlerAdapter bean，
+	 * 我们默认使用SimpleControllerHandlerAdapter。
 	 */
 	private void initHandlerAdapters(ApplicationContext context) {
 		this.handlerAdapters = null;
@@ -708,9 +708,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Initialize the HandlerExceptionResolver used by this class.
-	 * <p>If no bean is defined with the given name in the BeanFactory for this namespace,
-	 * we default to no exception resolver.
+	 * 初始化该类使用的HandlerExceptionResolver。
+	 * <p>如果在该名称空间的 BeanFactory 中没有使用给定名称定义 Bean，
+	 * 我们默认没有异常解析器。
 	 */
 	private void initHandlerExceptionResolvers(ApplicationContext context) {
 		this.handlerExceptionResolvers = null;
